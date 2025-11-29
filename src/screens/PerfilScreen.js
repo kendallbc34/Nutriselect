@@ -11,11 +11,17 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { auth, db } from '../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+
+import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from '../firebase';
 
 export default function PerfilScreen({ navigation }) {
   const [modoEdicion, setModoEdicion] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [imagenPerfil, setImagenPerfil] = useState(null);
+
   const [datos, setDatos] = useState({
     nombre: '',
     email: '',
@@ -28,6 +34,30 @@ export default function PerfilScreen({ navigation }) {
 
   const user = auth.currentUser;
 
+  const subirImagen = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      const imageUri = result.assets[0].uri;
+      setImagenPerfil(imageUri);
+
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const storageRef = ref(storage, `perfil/${user.uid}.jpg`);
+      await uploadBytes(storageRef, blob);
+
+      const downloadURL = await getDownloadURL(storageRef);
+      await updateDoc(doc(db, 'usuarios', user.uid), { fotoPerfil: downloadURL });
+
+      Alert.alert('✅ Imagen de perfil actualizada');
+    }
+  };
+
   useEffect(() => {
     if (!user) return;
 
@@ -37,7 +67,12 @@ export default function PerfilScreen({ navigation }) {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setDatos(docSnap.data());
+          const data = docSnap.data();
+          setDatos(data);
+
+          if (data.fotoPerfil) {
+            setImagenPerfil(data.fotoPerfil);
+          }
         } else {
           Alert.alert('No se encontraron los datos del usuario.');
         }
@@ -49,6 +84,14 @@ export default function PerfilScreen({ navigation }) {
       }
     };
 
+    const pedirPermisos = async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permiso denegado', 'Se necesita acceso a la galería para cambiar tu foto.');
+      }
+    };
+
+    pedirPermisos();
     cargarDatos();
   }, [user]);
 
@@ -87,7 +130,20 @@ export default function PerfilScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../../assets/perfil.png')} style={styles.avatar} />
+        <TouchableOpacity onPress={modoEdicion ? subirImagen : null}>
+          <Image
+            source={
+              imagenPerfil
+                ? { uri: imagenPerfil }
+                : require('../../assets/perfil-azul.png')
+            }
+            style={styles.avatar}
+          />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 12, color: '#001368ff' }}>
+          {modoEdicion ? 'Toca para cambiar foto' : ''}
+        </Text>
+
         {modoEdicion ? (
           <>
             <TextInput
@@ -126,9 +182,9 @@ export default function PerfilScreen({ navigation }) {
           </>
         ) : (
           <>
-            <Text style={styles.infoText}>Edad: {datos.edad} años</Text>
-            <Text style={styles.infoText}>Altura: {datos.altura} m</Text>
-            <Text style={styles.infoText}>Peso: {datos.peso} kg</Text>
+            <Text style={styles.infoText}>Edad: {datos.edad} </Text>
+            <Text style={styles.infoText}>Altura: {datos.altura}</Text>
+            <Text style={styles.infoText}>Peso: {datos.peso} </Text>
             <Text style={styles.infoText}>Grasa corporal: {datos.grasa}%</Text>
             <Text style={styles.infoText}>Masa muscular: {datos.musculo}%</Text>
           </>
@@ -171,7 +227,7 @@ const Campo = ({ label, valor, onChange }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#ffffffff',
     paddingTop: 50,
     paddingHorizontal: 20,
   },
@@ -180,22 +236,22 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 5,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     marginBottom: 12,
   },
   nombre: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#ffffffff',
+    color: '#001368ff',
   },
   email: {
     fontSize: 14,
-    color: '#bbb',
+    color: '#020202ff',
   },
   infoCard: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#001368ff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -212,7 +268,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   editButton: {
-    backgroundColor: '#058800ff',
+    backgroundColor: '#001368ff',
     padding: 14,
     borderRadius: 12,
     alignItems: 'center',
@@ -223,8 +279,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: '#1e1e1e',
-    color: '#fff',
+    backgroundColor: '#ffffffff',
+    color: '#000000ff',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,

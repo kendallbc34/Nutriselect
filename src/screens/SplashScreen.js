@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Image, StyleSheet, Animated, Text } from 'react-native';
-import LogoImage from '../../assets/logo-limpio.png';
+import LogoImage from '../../assets/logo-limpio-azul.png';
 
 export default function SplashScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -57,7 +57,7 @@ export default function SplashScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0e0e0e',
+    backgroundColor: '#fffcfcff',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 120,
@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#ffffffff',
+    color: '#000000ff',
     marginTop: 8,
     letterSpacing: 1,
   },
   slogan: {
     fontSize: 15,
-    color: '#cccccc',
+    color: '#000000ff',
     fontStyle: 'italic',
     textAlign: 'center',
     lineHeight: 20,

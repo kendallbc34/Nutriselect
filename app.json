@@ -4,10 +4,15 @@
     "slug": "nutriselect-app",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "nutriselectapp",  
     "plugins": [
-      "expo-barcode-scanner"
+      "expo-barcode-scanner",
+      "expo-web-browser"
     ],
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -15,7 +20,9 @@
       }
     },
     "android": {
-      "permissions": ["CAMERA"]
+      "permissions": [
+        "CAMERA"
+      ]
     }
   }
 }

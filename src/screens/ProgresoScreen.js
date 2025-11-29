@@ -212,7 +212,7 @@ export default function ProgresoScreen() {
 
   const glowInterpolation = glowAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['rgba(175, 173, 76, 0.6)', 'rgba(255, 196, 0, 1)'],
+    outputRange: ['rgba(76, 86, 175, 0.6)', 'rgba(38, 0, 255, 1)'],
   });
 
   const inputGlowStyle = (animValue) => ({
@@ -220,7 +220,7 @@ export default function ProgresoScreen() {
       inputRange: [0, 1],
       outputRange: ['#444', '#ffffffff'],
     }),
-    shadowColor: '#ffee00ff',
+    shadowColor: '#001368ff',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: animValue,
     shadowRadius: 12,
@@ -256,12 +256,12 @@ export default function ProgresoScreen() {
               seleccionado && {
                 borderWidth: 2,
                 borderColor: glowInterpolation,
-                shadowColor: '#ffffffff',
+                shadowColor: '#001368ff',
                 shadowOffset: { width: 0, height: 0 },
                 shadowOpacity: 0.85,
                 shadowRadius: 18,
                 elevation: 14,
-                backgroundColor: '#2b2b2bff',
+                backgroundColor: '#ffffffff',
               },
             ]}
           >
@@ -360,20 +360,20 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     paddingHorizontal: 20,
-    backgroundColor: '#121212',
+    backgroundColor: '#ffffffff',
     flexGrow: 1,
     paddingBottom: 80,
   },
   title: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#ffffffff',
+    color: '#001368ff',
     marginBottom: 25,
     textAlign: 'center',
     letterSpacing: 1,
   },
   botonCrear: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: '#001368ff',
     paddingVertical: 16,
     borderRadius: 10,
     marginBottom: 25,
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   botonCrearTexto: {
-    color: '#000000ff',
+    color: '#ffffffff',
     fontSize: 18,
     fontWeight: '700',
   },
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   registroContainer: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#001368ff',
     borderRadius: 14,
     paddingHorizontal: 18,
     marginBottom: 22,
@@ -403,12 +403,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pesoTexto: {
-    color: '#fff',
+    color: '#8a8a8aff',
     fontSize: 22,
     fontWeight: 'bold',
   },
   fechaTexto: {
-    color: '#bbb',
+    color: '#969595ff',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -416,6 +416,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 14,
+    //paddingRight: 10,   // ✅ Nuevo
+    marginBottom: 10,
   },
   botonAccion: {
     paddingVertical: 9,
@@ -436,12 +438,12 @@ const styles = StyleSheet.create({
   },
   modalFondo: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.75)',
+    backgroundColor: 'rgba(31, 31, 31, 0.75)',
     justifyContent: 'center',
     paddingHorizontal: 22,
   },
   modalContenido: {
-    backgroundColor: '#222',
+    backgroundColor: '#001368ff',
     borderRadius: 14,
     padding: 24,
     elevation: 6,
@@ -461,8 +463,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   input: {
-    backgroundColor: '#333',
-    color: '#ffffffff',
+    backgroundColor: '#fdfcfcff',
+    color: '#030303ff',
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 8,

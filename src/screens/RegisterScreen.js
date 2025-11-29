@@ -76,7 +76,7 @@ export default function RegisterScreen({ navigation }) {
   }
 
   try {
-    // 1. Crear usuario en Firebase Authentication
+    // 1️⃣ Crear usuario en Firebase Authentication
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       form.correo,
@@ -84,17 +84,70 @@ export default function RegisterScreen({ navigation }) {
     );
     const user = userCredential.user;
 
-    // 2. Guardar información adicional en Firestore
-    await setDoc(doc(db, 'usuarios', user.uid), {
-      nombre: form.nombre,
-      correo: form.correo,
-      sexo: form.sexo,
+    // 2️⃣ Calcular macros automáticamente
+    const calcularMacros = ({ edad, peso, altura, sexo, actividad }) => {
+      // Convertir strings con unidades a números
+      const edadNum = parseInt(edad);
+      const pesoNum = parseInt(peso);
+      const alturaNum = parseInt(altura);
+
+      let bmr;
+      if (sexo.toLowerCase() === 'hombre') {
+        bmr = 10 * pesoNum + 6.25 * alturaNum - 5 * edadNum + 5;
+      } else {
+        bmr = 10 * pesoNum + 6.25 * alturaNum - 5 * edadNum - 161;
+      }
+
+      const factoresActividad = {
+        'sedentario (0-1 días por semana)': 1.2,
+        'ligero (1-3 días por semana)': 1.375,
+        'moderado (3-5 días por semana)': 1.55,
+        'intenso (6-7 días por semana)': 1.725,
+      };
+
+      const tdee = bmr * (factoresActividad[actividad.toLowerCase()] || 1.2);
+
+      const proteinaGr = pesoNum * 1.8;
+      const proteinaKcal = proteinaGr * 4;
+
+      const grasaKcal = tdee * 0.3;
+      const grasaGr = grasaKcal / 9;
+
+      const carboKcal = tdee - (proteinaKcal + grasaKcal);
+      const carboGr = carboKcal / 4;
+
+      return {
+        calorias: Math.round(tdee),
+        proteinas: Math.round(proteinaGr),
+        grasas: Math.round(grasaGr),
+        carbohidratos: Math.round(carboGr),
+      };
+    };
+
+    const macros = calcularMacros({
       edad: form.edad,
       peso: form.peso,
       altura: form.altura,
-      nivel_actividad: form.nivel_actividad,
-      objetivo: form.objetivo,
+      sexo: form.sexo,
+      actividad: form.nivel_actividad,
     });
+
+    // 3️⃣ Guardar información adicional en Firestore (incluyendo macros)
+    await setDoc(
+      doc(db, 'usuarios', user.uid),
+      {
+        nombre: form.nombre,
+        correo: form.correo,
+        sexo: form.sexo,
+        edad: form.edad,
+        peso: form.peso,
+        altura: form.altura,
+        nivel_actividad: form.nivel_actividad,
+        objetivo: form.objetivo,
+        ...macros, // agrega calorías y macros
+      },
+      { merge: true }
+    );
 
     Alert.alert('✅ Registro exitoso', 'Tu cuenta ha sido creada con éxito.');
     navigation.navigate('Home', { user: form });
@@ -103,6 +156,7 @@ export default function RegisterScreen({ navigation }) {
     Alert.alert('❌ Error', error.message || 'No se pudo registrar el usuario.');
   }
 };
+
 
 const edades = Array.from({ length: 83 }, (_, i) => `${i + 18} años`);
 const pesos = Array.from({ length: 151 }, (_, i) => `${i + 30} kg`);
@@ -127,12 +181,12 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                   focusedField === 'nombre' && styles.inputFocused,
                 ]}
                 placeholder="Nombre"
-                placeholderTextColor="#999"
+                placeholderTextColor="#777777ff"
                 onChangeText={text => handleChange('nombre', text)}
                 onFocus={() => setFocusedField('nombre')}
                 onBlur={() => setFocusedField(null)}
                 value={form.nombre}
-                selectionColor="#ffee00ff"
+                selectionColor="#2600fdff"
               />
 
               <TextInput
@@ -148,7 +202,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onBlur={() => setFocusedField(null)}
                 value={form.correo}
                 autoCapitalize="none"
-                selectionColor="#ffee00ff"
+                selectionColor="#2600fdff"
               />
 
               <TextInput
@@ -163,7 +217,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onFocus={() => setFocusedField('contraseña')}
                 onBlur={() => setFocusedField(null)}
                 value={form.contraseña}
-                selectionColor="#ffee00ff"
+                selectionColor="#2600fdff"
               />
 
               <TouchableOpacity style={styles.button} onPress={() => setStep(2)}>
@@ -185,7 +239,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onPress={() => openModal('sexo', opcionesSexo)}
                 activeOpacity={0.8}
               >
-                <Text style={[styles.selectText, form.sexo ? { color: '#fff' } : null]}>
+                <Text style={[styles.selectText, form.sexo ? { color: '#000000ff' } : null]}>
                   {form.sexo || 'Seleccionar sexo'}
                 </Text>
               </TouchableOpacity>
@@ -198,7 +252,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onPress={() => openModal('edad', edades)}
                 activeOpacity={0.8}
               >
-                <Text style={[styles.selectText, form.edad ? { color: '#fff' } : null]}>
+                <Text style={[styles.selectText, form.edad ? { color: '#000000ff' } : null]}>
                   {form.edad || 'Seleccionar edad'}
                 </Text>
               </TouchableOpacity>
@@ -211,7 +265,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onPress={() => openModal('peso', pesos)}
                 activeOpacity={0.8}
               >
-                <Text style={[styles.selectText, form.peso ? { color: '#fff' } : null]}>
+                <Text style={[styles.selectText, form.peso ? { color: '#000000ff' } : null]}>
                   {form.peso || 'Seleccionar peso'}
                 </Text>
               </TouchableOpacity>
@@ -224,7 +278,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 onPress={() => openModal('altura', alturas)}
                 activeOpacity={0.8}
               >
-                <Text style={[styles.selectText, form.altura ? { color: '#fff' } : null]}>
+                <Text style={[styles.selectText, form.altura ? { color: '#000000ff' } : null]}>
                   {form.altura || 'Seleccionar altura'}
                 </Text>
               </TouchableOpacity>
@@ -251,7 +305,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 <Text
                   style={[
                     styles.selectText,
-                    form.nivel_actividad ? { color: '#fff' } : null,
+                    form.nivel_actividad ? { color: '#000000ff' } : null,
                   ]}
                 >
                   {form.nivel_actividad || 'Nivel de actividad'}
@@ -267,7 +321,7 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
                 activeOpacity={0.8}
               >
                 <Text
-                  style={[styles.selectText, form.objetivo ? { color: '#fff' } : null]}
+                  style={[styles.selectText, form.objetivo ? { color: '#070707ff' } : null]}
                 >
                   {form.objetivo || 'Seleccionar objetivo'}
                 </Text>
@@ -278,10 +332,10 @@ const alturas = Array.from({ length: 101 }, (_, i) => `${i + 100} cm`);
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#444', marginTop: 10 }]}
+                style={[styles.button, { backgroundColor: '#000000ff', marginTop: 10 }]}
                 onPress={() => setStep(2)}
               >
-                <Text style={[styles.buttonText, { color: '#fff' }]}>Volver</Text>
+                <Text style={[styles.buttonText, { color: '#ffffffff' }]}>Volver</Text>
               </TouchableOpacity>
             </>
           )}
@@ -328,7 +382,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     paddingTop: 50,
-    backgroundColor: '#121212',
+    backgroundColor: '#ffffffff',
   },
   innerContainer: {
     padding: 20,
@@ -337,19 +391,19 @@ const styles = StyleSheet.create({
     fontSize: 26,
     marginBottom: 20,
     fontWeight: 'bold',
-    color: '#ffffffff',
+    color: '#000000ff',
     textAlign: 'center',
   },
   section: {
     fontSize: 18,
-    color: '#aaa',
+    color: '#000000ff',
     marginBottom: 10,
     marginTop: 20,
     textAlign: 'left',
   },
   input: {
-    backgroundColor: '#1e1e1e',
-    color: '#fff',
+    backgroundColor: '#ffffffff',
+    color: '#000000ff',
     padding: 14,
     borderRadius: 12,
     marginBottom: 12,
@@ -358,14 +412,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   inputFocused: {
-    borderColor: '#ffee00ff',
-    shadowColor: '#ffee00ff',
+    borderColor: '#001aafff',
+    shadowColor: '#001aafff',
     shadowOpacity: 0.9,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 0 },
   },
   select: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#ffffffff',
     padding: 14,
     borderRadius: 12,
     marginBottom: 12,
@@ -375,17 +429,17 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontSize: 16,
-    color: '#999',
+    color: '#000000ff',
   },
   button: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: '#2e2c9eff',
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 10,
   },
   buttonText: {
-    color: '#000000ff',
+    color: '#ffffffff',
     fontWeight: 'bold',
     fontSize: 16,
   },

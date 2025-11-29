@@ -84,9 +84,9 @@ export default function AgregarComidaScreen({ navigation }) {
   const inputGlowStyle = (animValue) => ({
     borderColor: animValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['#444', '#ffee00ff'],
+      outputRange: ['#3b3b3bff', '#002fffff'],
     }),
-    shadowColor: '#ffee00ff',
+    shadowColor: '#002fffff',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: animValue,
     shadowRadius: animValue.interpolate({ inputRange: [0, 1], outputRange: [0, 8] }),
@@ -210,7 +210,7 @@ export default function AgregarComidaScreen({ navigation }) {
       </View>
       <View style={styles.botonesFila}>
         <TouchableOpacity onPress={() => onEditar(item)} style={styles.botonIcono}>
-          <Text style={{ color: '#ffee00ff', fontWeight: '700' }}>Editar</Text>
+          <Text style={{ color: '#ffffffff', fontWeight: '700' }}>Editar</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onEliminar(item.id)} style={styles.botonIcono}>
           <Text style={{ color: '#f44336', fontWeight: '700' }}>Eliminar</Text>
@@ -220,7 +220,7 @@ export default function AgregarComidaScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffffff' }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -260,7 +260,7 @@ export default function AgregarComidaScreen({ navigation }) {
                 style={styles.unidadSelector}
                 onPress={() => setUnidadSelectorVisible(!unidadSelectorVisible)}
               >
-                <Text style={{ color: '#fff', fontWeight: 'bold' }}>{unidad}</Text>
+                <Text style={{ color: '#070707ff', fontWeight: 'bold' }}>{unidad}</Text>
               </TouchableOpacity>
             </View>
 
@@ -284,7 +284,7 @@ export default function AgregarComidaScreen({ navigation }) {
             <Animated.View style={[styles.inputContainer, inputGlowStyle(glowCalorias)]}>
               <TextInput
                 placeholder="Calorías"
-                placeholderTextColor="#999"
+                placeholderTextColor="#000000ff"
                 keyboardType="numeric"
                 style={styles.input}
                 value={calorias}
@@ -299,7 +299,7 @@ export default function AgregarComidaScreen({ navigation }) {
               style={styles.tiempoSelector}
               onPress={() => setTiempoSelectorVisible(!tiempoSelectorVisible)}
             >
-              <Text style={{ color: '#fff', fontWeight: '700' }}>Tiempo: {tiempoComida}</Text>
+              <Text style={{ color: '#000000ff', fontWeight: '700' }}>Tiempo: {tiempoComida}</Text>
             </TouchableOpacity>
 
             {tiempoSelectorVisible && (
@@ -332,7 +332,7 @@ export default function AgregarComidaScreen({ navigation }) {
             <Text style={[styles.title, { marginTop: 30 }]}>Comidas Registradas</Text>
 
             {comidas.length === 0 ? (
-              <Text style={{ color: '#999', textAlign: 'center', marginTop: 10 }}>
+              <Text style={{ color: '#000000ff', textAlign: 'center', marginTop: 10 }}>
                 No has registrado comidas aún
               </Text>
             ) : (
@@ -363,11 +363,11 @@ export default function AgregarComidaScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#ffffffff',
     padding: 24,
   },
   title: {
-    color: '#ffee00ff',
+    color: '#002fffff',
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
@@ -377,33 +377,33 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 14,
     marginBottom: 18,
-    backgroundColor: '#1f1f1f',
+    backgroundColor: '#ffffffff',
   },
   inputContainerCantidad: {
     borderWidth: 2,
     borderRadius: 14,
     marginRight: 12,
-    backgroundColor: '#1f1f1f',
+    backgroundColor: '#ffffffff',
   },
   input: {
-    color: '#eee',
+    color: '#000000ff',
     paddingVertical: 14,
     paddingHorizontal: 18,
     fontSize: 16,
     borderRadius: 14,
   },
   unidadSelector: {
-    backgroundColor: '#333',
+    backgroundColor: '#ffffffff',
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#ffee00ff',
+    borderColor: '#002fffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   unidadPanel: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#242424ff',
     borderRadius: 10,
     paddingVertical: 8,
     marginBottom: 18,
@@ -418,21 +418,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   tiempoSelector: {
-    backgroundColor: '#333',
+    backgroundColor: '#ffffffff',
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#ffee00ff',
+    borderColor: '#002fffff',
     alignItems: 'center',
     marginBottom: 18,
   },
   button: {
-    backgroundColor: '#9e9400ff',
+    backgroundColor: '#010f4dff',
     paddingVertical: 16,
     borderRadius: 16,
     alignItems: 'center',
-    shadowColor: '#ffee00ff',
+    shadowColor: '#002fffff',
     shadowOpacity: 0.6,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
@@ -450,15 +450,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#ffee00ff',
+    borderColor: '#002fffff',
   },
   backButtonText: {
-    color: '#ffee00ff',
+    color: '#002fffff',
     fontWeight: '700',
     fontSize: 16,
   },
   comidaItem: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#001058ff',
     padding: 14,
     borderRadius: 14,
     marginBottom: 12,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   comidaTiempo: {
-    color: '#ffee00ff',
+    color: '#ffffffff',
     fontWeight: '600',
     fontSize: 12,
     marginTop: 4,

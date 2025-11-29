@@ -169,19 +169,19 @@ export default function PlanificacionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: '#ffffffff',
     paddingTop: 40,
     paddingHorizontal: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#ffffffff',
+    color: '#001368ff',
     marginBottom: 20,
     textAlign: 'center',
   },
   diaCard: {
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#001368ff',
     borderRadius: 14,
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
-    borderBottomColor: '#2C2C2C',
+    borderBottomColor: '#f8f8f8ff',
     borderBottomWidth: 1,
   },
   comidaLabel: {
@@ -223,13 +223,13 @@ const styles = StyleSheet.create({
   },
   modalFondo: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: 'hsla(0, 0%, 0%, 0.70)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   modalContenido: {
-    backgroundColor: '#222',
+    backgroundColor: '#001883ff',
     borderRadius: 12,
     padding: 20,
     width: '100%',
@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    backgroundColor: '#333',
-    color: '#fff',
+    backgroundColor: '#ffffffff',
+    color: '#000000ff',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,

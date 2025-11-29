@@ -57,9 +57,9 @@ export default function RecetasScreen() {
   const inputGlowStyle = (animValue) => ({
     borderColor: animValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['#444', '#ffee00ff'],
+      outputRange: ['#444', '#1100ffff'],
     }),
-    shadowColor: '#ffee00ff',
+    shadowColor: '#1100ffff',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: animValue,
     shadowRadius: animValue.interpolate({ inputRange: [0, 1], outputRange: [0, 12] }),
@@ -243,7 +243,7 @@ export default function RecetasScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Nombre de la receta"
-                placeholderTextColor="#999"
+                placeholderTextColor="#000000ff"
                 value={recetaActual.nombre}
                 onChangeText={(text) => setRecetaActual((prev) => ({ ...prev, nombre: text }))}
                 onFocus={() => animateGlow(glowReceta, true)}
@@ -294,7 +294,7 @@ export default function RecetasScreen() {
               style={styles.unidadSelector}
               onPress={() => setUnidadSelectorVisible(!unidadSelectorVisible)}
             >
-              <Text style={{ color: '#fff', fontWeight: '700' }}>
+              <Text style={{ color: '#ffffffff', fontWeight: '700' }}>
                 Unidad: {ingUnidad}
               </Text>
             </TouchableOpacity>
@@ -405,20 +405,20 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 60,
     paddingHorizontal: 20,
-    backgroundColor: '#121212',
+    backgroundColor: '#ffffffff',
     flexGrow: 1,
     paddingBottom: 80,
   },
   title: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#ffffffff',
+    color: '#001368ff',
     marginBottom: 25,
     textAlign: 'center',
     letterSpacing: 1,
   },
   botonCrear: {
-    backgroundColor: '#fff',
+    backgroundColor: '#001368ff',
     paddingVertical: 16,
     borderRadius: 10,
     marginBottom: 25,
@@ -426,25 +426,25 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   botonCrearTexto: {
-    color: '#000',
+    color: '#ffffffff',
     fontSize: 18,
     fontWeight: '700',
   },
   sinRegistros: {
-    color: '#aaa',
+    color: '#0c0c0cff',
     fontStyle: 'italic',
     textAlign: 'center',
     marginBottom: 25,
   },
   recetaContainer: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#001368ff',
     borderRadius: 14,
     paddingHorizontal: 18,
     paddingVertical: 14,
     marginBottom: 22,
   },
   recetaNombre: {
-    color: '#fff',
+    color: '#ffffffff',
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -456,12 +456,12 @@ const styles = StyleSheet.create({
   },
   modalFondo: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.75)',
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
     justifyContent: 'center',
     paddingHorizontal: 22,
   },
   modalContenido: {
-    backgroundColor: '#222',
+    backgroundColor: '#f8f7f7ff',
     borderRadius: 14,
     padding: 24,
     elevation: 6,
@@ -469,33 +469,33 @@ const styles = StyleSheet.create({
   modalTitulo: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#ffffffff',
+    color: '#001368ff',
     marginBottom: 20,
     textAlign: 'center',
     letterSpacing: 1,
   },
   subtitulo: {
-    color: '#ddd',
+    color: '#070707ff',
     fontSize: 16,
     marginBottom: 10,
     fontWeight: '600',
   },
   inputContainer: {
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: '#ffffffff',
     borderRadius: 10,
     marginBottom: 16,
   },
   input: {
-    backgroundColor: '#333',
-    color: '#fff',
+    backgroundColor: '#ffffffff',
+    color: '#030303ff',
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 8,
     fontSize: 17,
   },
   unidadSelector: {
-    backgroundColor: '#333',
+    backgroundColor: '#001368ff',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   unidadPanel: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: '#001368ff',
     borderRadius: 14,
     padding: 12,
     marginBottom: 20,
@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     marginVertical: 6,
-    backgroundColor: '#333',
+    backgroundColor: '#001facff',
     borderRadius: 10,
   },
   unidadOpcionTexto: {
@@ -547,12 +547,12 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   botonModalTexto: {
-    color: '#fff',
+    color: '#000000ff',
     fontWeight: 'bold',
     fontSize: 17,
   },
   ingredienteEditable: {
-    backgroundColor: '#333',
+    backgroundColor: '#001368ff',
     borderRadius: 10,
     padding: 14,
     marginBottom: 12,
@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ingredienteTexto: {
-    color: '#fff',
+    color: '#ffffffff',
     fontSize: 16,
     flex: 1,
   },

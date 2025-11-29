@@ -1,23 +1,72 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // Estado comidas y calorías
-  const [caloriasConsumidas, setCaloriasConsumidas] = useState(0);
   const [comidas, setComidas] = useState([]);
-
-  // Estado actividades y calorías gastadas
+  const [caloriasConsumidas, setCaloriasConsumidas] = useState(0);
   const [actividades, setActividades] = useState([]);
   const [caloriasGastadas, setCaloriasGastadas] = useState(0);
+  const [user, setUser] = useState(null);
 
-  // Registrar comida
+  const auth = getAuth();
+
+  // 🔥 Escucha cambios de sesión del usuario (esto es lo que faltaba)
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return unsubscribe;
+  }, []);
+
+  // 🔥 Escucha en tiempo real de comidas guardadas en Firebase
+  useEffect(() => {
+    if (!user) return;
+
+    const comidasRef = collection(db, 'usuarios', user.uid, 'comidas');
+    const q = query(comidasRef, orderBy('fecha', 'desc'));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setComidas(data);
+
+      // Calcular total de calorías consumidas
+      const total = data.reduce((sum, item) => sum + (Number(item.calorias) || 0), 0);
+      setCaloriasConsumidas(total);
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  // 🔥 Escucha en tiempo real de actividades guardadas en Firebase
+  useEffect(() => {
+    if (!user) return;
+
+    const actividadesRef = collection(db, 'usuarios', user.uid, 'actividades');
+    const q = query(actividadesRef, orderBy('fecha', 'desc'));
+
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setActividades(data);
+
+      // Calcular total de calorías gastadas
+      const total = data.reduce((sum, item) => sum + (Number(item.calorias) || 0), 0);
+      setCaloriasGastadas(total);
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  // 🥗 Funciones locales (útiles si registras sin Firebase todavía)
   const registrarComida = (comida) => {
     setComidas(prev => [...prev, comida]);
     setCaloriasConsumidas(prev => prev + comida.calorias);
   };
 
-  // Editar comida
   const editarComida = (comidaEditada) => {
     setComidas(prev => {
       const comidaAnterior = prev.find(c => c.id === comidaEditada.id);
@@ -31,25 +80,22 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  // Eliminar comida
   const eliminarComida = (id) => {
     setComidas(prev => {
       const comidaEliminada = prev.find(c => c.id === id);
       if (!comidaEliminada) return prev;
 
       setCaloriasConsumidas(current => current - comidaEliminada.calorias);
-
       return prev.filter(c => c.id !== id);
     });
   };
 
-  // Registrar actividad
+
   const registrarActividad = (actividad) => {
     setActividades(prev => [...prev, actividad]);
     setCaloriasGastadas(prev => prev + actividad.calorias);
   };
 
-  // Editar actividad
   const editarActividad = (actividadEditada) => {
     setActividades(prev => {
       const actividadAnterior = prev.find(a => a.id === actividadEditada.id);
@@ -63,14 +109,12 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  // Eliminar actividad
   const eliminarActividad = (id) => {
     setActividades(prev => {
       const actividadEliminada = prev.find(a => a.id === id);
       if (!actividadEliminada) return prev;
 
       setCaloriasGastadas(current => current - actividadEliminada.calorias);
-
       return prev.filter(a => a.id !== id);
     });
   };
@@ -78,14 +122,14 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        caloriasConsumidas,
         comidas,
+        caloriasConsumidas,
         registrarComida,
         editarComida,
         eliminarComida,
 
-        caloriasGastadas,
         actividades,
+        caloriasGastadas,
         registrarActividad,
         editarActividad,
         eliminarActividad,
