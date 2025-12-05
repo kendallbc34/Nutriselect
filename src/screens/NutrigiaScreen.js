@@ -39,6 +39,7 @@ export default function NutrigiaScreen() {
     return unsubscribe;
   }, []);
 
+
   // 🔹 Cargar perfil del usuario desde Firestore
   useEffect(() => {
     if (!userId) return; // Esperar hasta tener el UID real
@@ -51,6 +52,7 @@ export default function NutrigiaScreen() {
         if (userSnap.exists()) {
           const data = userSnap.data();
           setUserProfile(data);
+
 
           // Mensaje de bienvenida personalizado
           setMessages([
@@ -70,6 +72,8 @@ export default function NutrigiaScreen() {
 
     fetchUserProfile();
   }, [userId]);
+
+  
 
   // 🔹 Enviar mensaje del usuario y obtener respuesta de NutrigIA
   const sendMessage = async () => {
