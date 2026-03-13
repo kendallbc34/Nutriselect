@@ -13,7 +13,7 @@ import {
 import { Image, ImageBackground } from 'react-native';
 import { doc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { db } from '../firebase'; // Ajusta la ruta según tu estructura
+import { db } from '../firebase'; 
 
 const TOGETHER_API_KEY = 'a8333993debf428537cda7a9f6e153af1b21707e05e8c8a971e447648b7c8dc3';
 
