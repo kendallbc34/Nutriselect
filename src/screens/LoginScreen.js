@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
+
 import {
   View,
   Text,
@@ -70,6 +71,7 @@ export default function LoginScreen({ navigation }) {
       } else {
         Alert.alert('Error', 'No se encontraron los datos del usuario.');
       }
+      
     } catch (error) {
       console.error('Error al iniciar sesión:', error.code, error.message);
       let mensaje = 'Ocurrió un error al iniciar sesión.';
